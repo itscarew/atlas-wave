@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d0f9b89d.chunk.css",
+    "main.js": "/static/js/main.c38d2fd1.chunk.js",
+    "main.js.map": "/static/js/main.c38d2fd1.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.09b85ec0.js",
+    "runtime-main.js.map": "/static/js/runtime-main.09b85ec0.js.map",
+    "static/js/2.13be5456.chunk.js": "/static/js/2.13be5456.chunk.js",
+    "static/js/2.13be5456.chunk.js.map": "/static/js/2.13be5456.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.653323dc1f13638acf43fc7d4f9c760c.js": "/precache-manifest.653323dc1f13638acf43fc7d4f9c760c.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.d0f9b89d.chunk.css.map": "/static/css/main.d0f9b89d.chunk.css.map",
+    "static/js/2.13be5456.chunk.js.LICENSE.txt": "/static/js/2.13be5456.chunk.js.LICENSE.txt",
+    "static/media/fonts.css": "/static/media/futura medium bt.ee64fb9d.ttf",
+    "static/media/landing-pic-articles.jpg": "/static/media/landing-pic-articles.9ec75aa5.jpg",
+    "static/media/landing-pic-girl.jpg": "/static/media/landing-pic-girl.4db8e1bf.jpg",
+    "static/media/landing-pic-people.jpg": "/static/media/landing-pic-people.16f561dc.jpg",
+    "static/media/landing-pic.jpg": "/static/media/landing-pic.5cc0e42c.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.09b85ec0.js",
+    "static/js/2.13be5456.chunk.js",
+    "static/css/main.d0f9b89d.chunk.css",
+    "static/js/main.c38d2fd1.chunk.js"
+  ]
+}
