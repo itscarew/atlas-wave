@@ -15,89 +15,102 @@ exports.get_all_users = (req, res) => {
 };
 
 exports.register_user = (req, res) => {
-  User.find({
-    $or: [{ email: req.body.email }, { username: req.body.username }],
-  })
-    .exec()
-    .then((user) => {
-      if (user.length >= 1) {
-        return res.status(409).json({
-          err: "Email already exists or username has already been taken",
-        });
-      } else {
-        bcrypt.hash(req.body.password, 10, (err, hash) => {
-          if (err) {
-            return res.status(404).json({
-              err: err.message,
-            });
-          } else {
-            const user = new User({
-              username: req.body.username,
-              name: req.body.name,
-              email: req.body.email,
-              password: hash,
-              role: req.body.role,
-            });
-            return user
-              .save()
-              .then((user) => {
-                res.status(201).json({
-                  message: "User created successfully",
-                  data: user,
-                });
-              })
-              .catch((err) => {
-                res.status(400).json({
-                  err: err.message,
-                });
+  const { username, name, email, password, role } = req.body;
+  if (!username || !name || !email || !password) {
+    return res.status(400).json({ err: "Please enter all fields" });
+  }
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ err: "Password must be at least 6 characters" });
+  } else
+    User.find({
+      $or: [{ email }, { username }],
+    })
+      .exec()
+      .then((user) => {
+        if (user.length >= 1) {
+          return res.status(409).json({
+            err: "Email already exists or username has already been taken",
+          });
+        } else {
+          bcrypt.hash(password, 10, (err, hash) => {
+            if (err) {
+              return res.status(404).json({
+                err: err.message,
               });
-          }
-        });
-      }
-    });
+            } else {
+              const user = new User({
+                username,
+                name,
+                email,
+                password: hash,
+                role,
+              });
+              return user
+                .save()
+                .then((user) => {
+                  res.status(201).json({
+                    message: "User created successfully",
+                    data: user,
+                  });
+                })
+                .catch((err) => {
+                  res.status(400).json({
+                    err: err.message,
+                  });
+                });
+            }
+          });
+        }
+      });
 };
 
 exports.login_user = (req, res) => {
-  User.findOne({ email: req.body.email })
-    .exec()
-    .then((user) => {
-      if (!user) {
-        return res.status(404).json({
-          err: "This User does not exist !",
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ err: "Please enter all fields" });
+  } else
+    User.findOne({ email })
+      .exec()
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({
+            err: "This User does not exist !",
+          });
+        }
+        bcrypt.compare(password, user.password, (err, result) => {
+          if (err) {
+            return res.status(401).json({
+              err: "Authentication Failed, Password Incorrect",
+            });
+          } else if (result) {
+            const token = jwt.sign(
+              {
+                username: user.username,
+                name: user.name,
+                email: user.email,
+                userId: user._id,
+                role: user.role,
+              },
+              "secret"
+            );
+            return res.status(200).json({
+              message: "Authentication Successful, Logged In",
+              token: token,
+              data: user,
+            });
+          } else
+            res.status(401).json({
+              err: "Authentication Failed. Can't log In",
+            });
         });
-      }
-      bcrypt.compare(req.body.password, user.password, (err, result) => {
-        if (err) {
-          return res.status(401).json({
-            err: "Authentication Failed, Password Incorrect",
-          });
-        } else if (result) {
-          const token = jwt.sign(
-            {
-              username: user.username,
-              name: user.name,
-              email: user.email,
-              userId: user._id,
-              role: user.role,
-            },
-            "secret"
-          );
-          return res.status(200).json({
-            message: "Authentication Successful, Logged In",
-            token: token,
-            data: user,
-          });
-        } else
-          res.status(401).json({
-            err: "Authentication Failed. Can't log In",
-          });
+      })
+      .catch((err) => {
+        res.status(400).json({
+          err: err.message,
+        });
       });
-    })
-    .catch((err) => {
-      res.status(400).json({
-        err: err.message,
-      });
-    });
 };
 
 exports.get_user_profile = (req, res) => {

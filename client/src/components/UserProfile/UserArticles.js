@@ -15,7 +15,9 @@ const UserArticle = ({ authName, user, articles, loading }) => {
         <p className=" my-2 text-2xl">
           {authName === user?.name
             ? "You do not have any Article Yet  "
-            : `${user?.name} does not have any Article Yet`}
+            : `${
+                user?.name ? user?.name : "User"
+              } does not have any Article Yet`}
         </p>
       ) : (
         <div className="flex flex-col-reverse">

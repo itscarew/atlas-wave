@@ -82,6 +82,7 @@ export const createArticle = (article, history) => (dispatch) => {
         type: "GET_ERRORS",
         payload: err.response.data,
       });
+      dispatch(articleLoaded());
     });
 };
 

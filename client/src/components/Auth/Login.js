@@ -92,7 +92,6 @@ class Login extends Component {
               value={this.state.email}
               placeholder="Email"
               onChange={this.handleChange}
-              required
               className="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
@@ -107,7 +106,6 @@ class Login extends Component {
                 value={this.state.password}
                 placeholder="Password"
                 onChange={this.handleChange}
-                required
                 className="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
               <div

@@ -3,6 +3,7 @@ const express = require("express");
 const Article = require("../models/articles.models");
 
 const multer = require("multer");
+const path = require("path");
 const router = express.Router();
 const {
   get_all_articles,
@@ -32,8 +33,19 @@ const storage = multer.diskStorage({
 //specify file size and storage
 const upload = multer({
   storage: storage,
+  fileFilter: function (req, file, callback) {
+    var ext = path.extname(file.originalname);
+    if (ext !== ".png" && ext !== ".jpg" && ext !== ".jpeg") {
+      return callback(
+        new Error(
+          "Ooopps...sorry. Only images(png,jpeg,jpg) are allowed. Updates will be coming soon"
+        )
+      );
+    }
+    callback(null, true);
+  },
   limits: {
-    fileSize: 1024 * 1024 * 5,
+    fileSize: 1024 * 1024 * 2,
   },
 });
 
