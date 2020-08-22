@@ -12,11 +12,14 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 //connect to the the Database
-mongoose.connect(`mongodb://localhost:27017/newwave`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
+mongoose.connect(
+  `mongodb+srv://itscarew:${process.env.MONGOPASSW0RD}@atlas-wave-db.yqscb.mongodb.net/${process.env.MONGODBNAME}?retryWrites=true&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
+);
 
 const app = express();
 
