@@ -121,6 +121,7 @@ export const setOtherUser = (userId) => (dispatch) => {
         type: "GET_ERROR",
         payload: err.response.data,
       });
+      dispatch(setUserLoaded());
     });
 };
 

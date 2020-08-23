@@ -23,7 +23,13 @@ const UserArticle = ({ authName, user, articles, loading }) => {
         <div className="flex flex-col-reverse">
           {articles?.map((article) => {
             return (
-              <Article key={article._id} article={article} loading={loading} />
+              <div>
+                <Article
+                  key={article._id}
+                  article={article}
+                  loading={loading}
+                />
+              </div>
             );
           })}
         </div>

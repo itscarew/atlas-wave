@@ -1,10 +1,11 @@
 const express = require("express");
+const mongoose = require("mongoose");
 
-const Article = require("../models/articles.models");
-
+const GridFsStorage = require("multer-gridfs-storage");
 const multer = require("multer");
 const path = require("path");
 const router = express.Router();
+const crypto = require("crypto");
 const {
   get_all_articles,
   create_an_article,
@@ -12,41 +13,64 @@ const {
   delete_any_article,
   get_all_articles_by_any_user,
   explore_all_articlles,
+  like_any_article,
+  unlike_any_article,
 } = require("../controllers/articles.controllers");
 
 const checkAuth = require("../auth/check-auth");
 const checkAdmin = require("../auth/check-admin");
 
-//path where the images are going to be stored
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./uploads");
-  },
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      new Date().toISOString().replace(/[\/\\:]/g, "_") + file.originalname
-    );
+const dotenv = require("dotenv");
+dotenv.config();
+
+const url = `mongodb+srv://itscarew:${process.env.MONGOPASSW0RD}@atlas-wave-db.yqscb.mongodb.net/${process.env.MONGODBNAME}?retryWrites=true&w=majority`;
+
+const storage = new GridFsStorage({
+  url: url,
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = file.originalname;
+        const fileInfo = {
+          filename:
+            new Date().toISOString().replace(/[\/\\:]/g, "_") + filename,
+          bucketName: "uploads",
+        };
+        resolve(fileInfo);
+      });
+    });
   },
 });
-
-//specify file size and storage
 const upload = multer({
-  storage: storage,
+  storage,
   fileFilter: function (req, file, callback) {
     var ext = path.extname(file.originalname);
     if (ext !== ".png" && ext !== ".jpg" && ext !== ".jpeg") {
       return callback(
-        new Error(
-          "Ooopps...sorry. Only images(png,jpeg,jpg) are allowed. Updates will be coming soon"
-        )
+        new Error("Ooopps...sorry. Only images(png,jpeg,jpg) are allowed.")
       );
     }
     callback(null, true);
   },
   limits: {
-    fileSize: 1024 * 1024 * 2,
+    fileSize: 1024 * 1024 * 3,
   },
+});
+
+const connect = mongoose.createConnection(url, {
+  useNewUrlParser: true,
+  useFindAndModify: false,
+});
+
+let gfs;
+connect.once("open", () => {
+  // initialize stream
+  gfs = new mongoose.mongo.GridFSBucket(connect.db, {
+    bucketName: "uploads",
+  });
 });
 
 //route to get all articles
@@ -61,58 +85,31 @@ router.post("/", upload.single("articleImage"), checkAuth, create_an_article);
 //route to get any article
 router.get("/:articleId", checkAuth, get_any_article);
 
+//route to get any article
+router.get("/articleImage/:filename", (req, res) => {
+  // console.log('id', req.params.id)
+  gfs
+    .find({
+      filename: req.params.filename,
+    })
+    .toArray((err, files) => {
+      if (!files || files.length === 0) {
+        return res.status(404).json({
+          err: "no files exist",
+        });
+      }
+      gfs.openDownloadStreamByName(req.params.filename).pipe(res);
+    });
+});
+
 //route to delete any article (admin priviledges)
 router.delete("/:articleId", checkAuth, checkAdmin, delete_any_article);
 
 //route to get all articles posted by any user
 router.get("/user/:userId", checkAuth, get_all_articles_by_any_user);
 
-router.post("/like/:articleId", checkAuth, (req, res) => {
-  const { articleId } = req.params;
-  const { userId } = req.user;
-  Article.findById(articleId)
-    .then((article) => {
-      if (
-        article.likes.filter((like) => like.user.toString() === userId).length >
-        0
-      ) {
-        return res
-          .status(400)
-          .json({ err: "user has already liked this post" });
-      }
+router.post("/like/:articleId", checkAuth, like_any_article);
 
-      article.likes.unshift({ user: userId });
-      article.save().then((article) => res.json(article));
-    })
-    .catch((err) => {
-      res.status(404).json({ err: "No articles found" });
-    });
-});
-
-router.post("/unlike/:articleId", checkAuth, (req, res) => {
-  const { articleId } = req.params;
-  const { userId } = req.user;
-  Article.findById(articleId)
-    .then((article) => {
-      if (
-        article.likes.filter((like) => like.user.toString() === userId)
-          .length === 0
-      ) {
-        return res.status(400).json({ err: "you havent liked this post yet" });
-      }
-
-      //get Index
-      const removeIndex = article.likes
-        .map((like) => like.user.toString())
-        .indexOf(userId);
-
-      //splice out of array
-      article.likes.splice(removeIndex, 1);
-      article.save().then((post) => res.json(article));
-    })
-    .catch((err) => {
-      res.status(404).json({ err: "No articles found" });
-    });
-});
+router.post("/unlike/:articleId", checkAuth, unlike_any_article);
 
 module.exports = router;

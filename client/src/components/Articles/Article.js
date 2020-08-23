@@ -46,7 +46,7 @@ const Article = ({ article, loading }) => {
           </div>
           <img
             className="w-full height-28rem  object-contain"
-            src={`/${article?.articleImage}`}
+            src={`/articles/articleImage/${article?.articleImage}`}
             alt={`/${article?.articleImage}`}
           />
           <p className="text-gray-700 text-base px-6 py-4">

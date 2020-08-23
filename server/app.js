@@ -11,15 +11,13 @@ const commentsRoutes = require("./src/routes/comments.routes");
 const dotenv = require("dotenv");
 dotenv.config();
 
+const url = `mongodb+srv://itscarew:${process.env.MONGOPASSW0RD}@atlas-wave-db.yqscb.mongodb.net/${process.env.MONGODBNAME}?retryWrites=true&w=majority`;
 //connect to the the Database
-mongoose.connect(
-  `mongodb+srv://itscarew:${process.env.MONGOPASSW0RD}@atlas-wave-db.yqscb.mongodb.net/${process.env.MONGODBNAME}?retryWrites=true&w=majority`,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  }
-);
+mongoose.connect(url, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+});
 
 const app = express();
 
@@ -31,7 +29,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/user", userRoute);
 app.use("/articles", articlesRoute);
 app.use("/comments", commentsRoutes);
-app.use("/uploads", express.static("uploads"));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));

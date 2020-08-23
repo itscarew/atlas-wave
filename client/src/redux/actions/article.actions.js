@@ -18,6 +18,7 @@ export const setCurrentUserArticles = () => (dispatch) => {
         type: "GET_ERRORS",
         payload: err.response.data,
       });
+      dispatch(articleLoaded());
     });
 };
 
@@ -60,6 +61,7 @@ export const exploreArticles = () => (dispatch) => {
         type: "GET_ERRORS",
         payload: err.response.data,
       });
+      dispatch(articleLoaded());
     });
 };
 
@@ -123,6 +125,7 @@ export const setOtherUserArticles = (userId) => (dispatch) => {
         type: "GET_ERRORS",
         payload: err.response.data,
       });
+      dispatch(articleLoaded());
     });
 };
 

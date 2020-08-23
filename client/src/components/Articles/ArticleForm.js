@@ -76,7 +76,7 @@ class ArticleForm extends Component {
           </div>
           <div className="mb-6">
             <label className="block text-gray-700 text-sm  mb-2">
-              Your Article Image (recommended)* Size not more than 2mb*
+              Your Article Image (recommended)* Size not more than 3mb*
             </label>
             <input
               type="file"

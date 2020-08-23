@@ -29,7 +29,7 @@ exports.create_an_article = (req, res) => {
   const article = new Articles({
     title: req.body.title,
     content: req.body.content,
-    articleImage: req.file.path,
+    articleImage: req.file.filename,
     user: req.user.userId,
   });
 
@@ -167,5 +167,53 @@ exports.delete_any_article = (req, res) => {
     })
     .catch((err) => {
       res.status(400).json({ err: err.message });
+    });
+};
+
+exports.like_any_article = (req, res) => {
+  const { articleId } = req.params;
+  const { userId } = req.user;
+  Articles.findById(articleId)
+    .then((article) => {
+      if (
+        article.likes.filter((like) => like.user.toString() === userId).length >
+        0
+      ) {
+        return res
+          .status(400)
+          .json({ err: "user has already liked this post" });
+      }
+
+      article.likes.unshift({ user: userId });
+      article.save().then((article) => res.json(article));
+    })
+    .catch((err) => {
+      res.status(404).json({ err: "No articles found" });
+    });
+};
+
+exports.unlike_any_article = (req, res) => {
+  const { articleId } = req.params;
+  const { userId } = req.user;
+  Articles.findById(articleId)
+    .then((article) => {
+      if (
+        article.likes.filter((like) => like.user.toString() === userId)
+          .length === 0
+      ) {
+        return res.status(400).json({ err: "you havent liked this post yet" });
+      }
+
+      //get Index
+      const removeIndex = article.likes
+        .map((like) => like.user.toString())
+        .indexOf(userId);
+
+      //splice out of array
+      article.likes.splice(removeIndex, 1);
+      article.save().then((post) => res.json(article));
+    })
+    .catch((err) => {
+      res.status(404).json({ err: "No articles found" });
     });
 };
