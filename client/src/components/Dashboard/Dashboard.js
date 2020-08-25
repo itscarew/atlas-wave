@@ -36,7 +36,7 @@ class Dashboard extends Component {
             <MyArticles articles={articles} loading={loading} />
           )}
         </div>
-        <div className="w-1/3 mx-4">
+        <div className="w-1/3 h-screen overflow-y-auto mx-4 ">
           <Popular articles={filterArticles} loading={loading} />
         </div>
       </div>

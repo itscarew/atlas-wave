@@ -60,7 +60,7 @@ const LandingContent = () => {
       </div>
 
       <div className="w-full flex justify-between items-start my-8 ">
-        <div className="w-1/2 p-4 ">
+        <div className="w-1/2 m-8 ">
           <h2 className="text-5xl"> World-class publications </h2>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -90,7 +90,7 @@ const LandingContent = () => {
             alt="girl-pic"
           />
         </div>
-        <div className="w-1/2 p-4 ">
+        <div className="w-1/2 m-8 ">
           <h2 className="text-5xl"> The topics you love</h2>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -105,7 +105,7 @@ const LandingContent = () => {
       </div>
 
       <div className="w-full flex justify-between items-start my-8 ">
-        <div className="w-1/2 p-4 ">
+        <div className="w-1/2 m-8 ">
           <h2 className="text-5xl"> Undiscovered voices </h2>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -142,10 +142,10 @@ const LandingContent = () => {
       </h4>
 
       <div className="flex flex-col mx-auto w-1/2 mb-8 items-center justify-between  ">
-        <p className="font-serif text-6xl text-gray-800  ">
+        <p className="font-serif text-6xl text-gray-800 mb-2 ">
           Expand your reading.
         </p>
-        <p className="font-serif text-6xl  text-gray-800   ">
+        <p className="font-serif text-6xl  text-gray-800 mb-2  ">
           {" "}
           Expand your mind.{" "}
         </p>

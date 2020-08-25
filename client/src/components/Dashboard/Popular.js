@@ -31,7 +31,7 @@ const Info = ({ articles, loading }) => {
             <FaWpexplorer className="ml-2" size="1.5rem" />
           </div>
           <div>
-            {articles?.slice(0, 5).map((articles, index) => (
+            {articles?.slice(0, 6).map((articles, index) => (
               <Link
                 key={articles._id}
                 to={`/articles/${articles._id}`}
