@@ -1,6 +1,5 @@
 import axios from "axios";
 import setAuthToken from "../../utils/setAuthToken";
-import jwt_decode from "jwt-decode";
 
 // Register User
 export const registerUser = (newUser, history) => (dispatch) => {
@@ -8,15 +7,12 @@ export const registerUser = (newUser, history) => (dispatch) => {
   axios
     .post("/user/register", newUser)
     .then((res) => {
-      history.push("/login");
+      history.push("/signin");
       dispatch(setUserLoaded());
       dispatch(clearError());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
+      dispatch(getError(err.response.data));
       dispatch(setUserLoaded());
     });
 };
@@ -33,18 +29,29 @@ export const loginUser = (user) => (dispatch) => {
       localStorage.setItem("jwtToken", token);
       // Set token to Auth header
       setAuthToken(token);
-      // Decode token to get user data
-      const decoded = jwt_decode(token);
-      // Set current user
-      dispatch(setCurrentUser(decoded));
+      // // Decode token to get user data
+      // const decoded = jwt_decode(token);
+      // // Set current user
+      // dispatch(setCurrentUser(decoded));
+      dispatch(getCurrentUserProfile());
       dispatch(setUserLoaded());
       dispatch(clearError());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
+      dispatch(getError(err.response.data));
+      dispatch(setUserLoaded());
+    });
+};
+
+//get current user profile || MAIN FOR USER
+export const getCurrentUserProfile = () => (dispatch) => {
+  axios
+    .get("/user/profile")
+    .then((res) => {
+      dispatch(setCurrentUser(res.data.data));
+    })
+    .catch((err) => {
+      dispatch(getError(err.response.data));
       dispatch(setUserLoaded());
     });
 };
@@ -54,14 +61,11 @@ export const editCurrentUser = (user) => (dispatch) => {
   axios
     .patch("/user/profile", user)
     .then((res) => {
-      dispatch(logoutUser());
+      dispatch(getCurrentUserProfile());
       dispatch(clearError());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
+      dispatch(getError(err.response.data));
     })
     .finally(() => {
       dispatch(setUserLoaded());
@@ -77,10 +81,7 @@ export const editCurrentUserPassword = (userPassword) => (dispatch) => {
       dispatch(clearError());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
+      dispatch(getError(err.response.data));
     })
     .finally(() => {
       dispatch(setUserLoaded());
@@ -96,10 +97,7 @@ export const deleteCurrentUser = () => (dispatch) => {
       dispatch(clearError());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
+      dispatch(getError(err.response.data));
     });
 };
 
@@ -117,10 +115,7 @@ export const setOtherUser = (userId) => (dispatch) => {
       dispatch(clearError());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERROR",
-        payload: err.response.data,
-      });
+      dispatch(getError(err.response.data));
       dispatch(setUserLoaded());
     });
 };
@@ -151,6 +146,14 @@ export const setUserLoaded = () => {
 export const clearError = () => {
   return {
     type: "CLEAR_ERRORS",
+  };
+};
+
+//get Error
+export const getError = (error) => {
+  return {
+    type: "GET_ERRORS",
+    payload: error,
   };
 };
 

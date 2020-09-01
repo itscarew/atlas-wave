@@ -1,24 +1,22 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Navbar from "./components/Layouts/Navbar";
-import Landing from "./components/Layouts/Landing";
-import Register from "./components/Auth/Register";
-import Login from "./components/Auth/Login";
-import Dashboard from "./components/Dashboard/Dashboard";
-import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
-import ArticleForm from "./components/Articles/ArticleForm";
-import Footer from "./components/Layouts/Footer";
-import Explore from "./components/Explore/Explore";
-import EditProfile from "./components/Profile/EditProfile";
-import ArticlePage from "./components/Articles/ArticlePage";
-import UsersProfile from "./components/UserProfile/UsersProfilePage";
+
+import PrivateRoute from "./private-route/private-route";
 
 import store from "./store/store";
 
-import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-import { setCurrentUser } from "./redux/actions/user.actions";
-import NotFoundPage from "./components/NotFound/NotFoundPage";
+import { getCurrentUserProfile } from "./redux/actions/user.actions";
+import NotFoundPage from "./pages/not-found";
+import IndexPage from "./pages";
+import SigninPage from "./pages/auth/signin";
+import SignupPage from "./pages/auth/signup";
+import ExplorePage from "./pages/explore";
+import DashboardPage from "./pages/dashboard";
+import UserProfilePage from "./pages/user-profile";
+import OneArticlePage from "./pages/one-article";
+import EditUserPage from "./pages/edit-user";
+import CreateArticlePage from "./pages/article-form";
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -26,9 +24,11 @@ if (localStorage.jwtToken) {
   const token = localStorage.jwtToken;
   setAuthToken(token);
   // Decode token and get user info and exp
-  const decoded = jwt_decode(token);
+  // const decoded = jwt_decode(token);
   // Set user and isAuthenticated
-  store.dispatch(setCurrentUser(decoded)); // Check for expired token
+  store.dispatch(getCurrentUserProfile());
+
+  // Check for expired token
   // const currentTime = Date.now() / 1000; // to get in milliseconds
   // if (decoded.exp < currentTime) {
   //   // Logout user
@@ -40,31 +40,22 @@ if (localStorage.jwtToken) {
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col justify-between ">
-        <div>
-          <Navbar />
-          <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/explore" component={Explore} />
-
-            <PrivateRoute exact path="/dashboard" component={Dashboard} />
-            <PrivateRoute
-              exact
-              path="/articles/:articleId"
-              component={ArticlePage}
-            />
-            <PrivateRoute exact path="/user/:userId" component={UsersProfile} />
-            <PrivateRoute exact path="/create" component={ArticleForm} />
-            <PrivateRoute exact path="/profile" component={EditProfile} />
-            <Route exact path="*" component={NotFoundPage} />
-          </Switch>
-        </div>
-        <React.Fragment>
-          <Footer />
-        </React.Fragment>
-      </div>
+      <Switch>
+        <Route exact path="/" component={IndexPage} />
+        <Route exact path="/signup" component={SignupPage} />
+        <Route exact path="/signin" component={SigninPage} />
+        <Route exact path="/explore" component={ExplorePage} />
+        <PrivateRoute exact path="/dashboard" component={DashboardPage} />
+        <PrivateRoute
+          exact
+          path="/articles/:articleId"
+          component={OneArticlePage}
+        />
+        <PrivateRoute exact path="/user/:userId" component={UserProfilePage} />
+        <PrivateRoute exact path="/create" component={CreateArticlePage} />
+        <PrivateRoute exact path="/profile" component={EditUserPage} />
+        <Route exact path="*" component={NotFoundPage} />
+      </Switch>
     </BrowserRouter>
   );
 }

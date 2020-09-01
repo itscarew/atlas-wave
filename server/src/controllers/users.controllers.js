@@ -179,27 +179,32 @@ exports.update_user_profile = (req, res) => {
 exports.update_user_profile_password = (req, res) => {
   const { userId } = req.user;
   const { password } = req.body;
-  bcrypt.hash(password, 10, (err, hash) => {
-    if (err) {
-      return res.status(404).json({
-        err: err.message,
-      });
-    } else {
-      User.updateOne({ _id: userId }, { $set: { password: hash } })
-        .exec()
-        .then((user) => {
-          res.status(200).json({
-            message: "User password updated succesfully",
-            data: user,
-          });
-        })
-        .catch((err) => {
-          res.status(400).json({
-            err: err.message,
-          });
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ err: "Password must be at least 6 characters" });
+  } else
+    bcrypt.hash(password, 10, (err, hash) => {
+      if (err) {
+        return res.status(404).json({
+          err: err.message,
         });
-    }
-  });
+      } else {
+        User.updateOne({ _id: userId }, { $set: { password: hash } })
+          .exec()
+          .then((user) => {
+            res.status(200).json({
+              message: "User password updated succesfully",
+              data: user,
+            });
+          })
+          .catch((err) => {
+            res.status(400).json({
+              err: err.message,
+            });
+          });
+      }
+    });
 };
 
 exports.get_any_user = (req, res) => {

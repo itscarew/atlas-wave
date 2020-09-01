@@ -211,7 +211,7 @@ exports.unlike_any_article = (req, res) => {
 
       //splice out of array
       article.likes.splice(removeIndex, 1);
-      article.save().then((post) => res.json(article));
+      article.save().then(() => res.json(article));
     })
     .catch((err) => {
       res.status(404).json({ err: "No articles found" });
