@@ -9,16 +9,18 @@ const SlicedArticles = ({ articles, limit, loadMore }) => {
         <Article key={article._id} article={article} />
       ))}
 
-      <div
-        onClick={() => loadMore()}
-        className="flex mx-auto my-12 justify-center "
-      >
-        <BsFillPlusCircleFill
-          size="2rem"
-          fill="#1a202c"
-          className="cursor-pointer"
-        />
-      </div>
+      {articles.length > limit ? (
+        <div
+          onClick={() => loadMore()}
+          className="flex mx-auto my-12 justify-center "
+        >
+          <BsFillPlusCircleFill
+            size="2rem"
+            fill="#1a202c"
+            className="cursor-pointer"
+          />
+        </div>
+      ) : null}
     </>
   );
 };

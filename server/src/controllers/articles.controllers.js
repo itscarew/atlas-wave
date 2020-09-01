@@ -14,6 +14,7 @@ exports.get_all_articles = (req, res) => {
 
 exports.explore_all_articlles = (req, res) => {
   Articles.find()
+    .sort({ createdAt: -1 })
     .populate("user", "_id username name email joined ")
     .populate("likes.user")
     .exec()
@@ -74,6 +75,7 @@ exports.get_all_articles_by_any_user = (req, res) => {
         res.status(404).json({ err: "This user does not exists !!" });
       } else {
         Articles.find({ user: userId })
+          .sort({ createdAt: -1 })
           .populate("user")
           .populate("likes.user")
           .select(
@@ -99,6 +101,7 @@ exports.get_all_articles_by_any_user = (req, res) => {
 exports.get_user_profile_article = (req, res) => {
   const { userId } = req.user;
   Articles.find({ user: userId })
+    .sort({ createdAt: -1 })
     .populate("user")
     .populate("likes.user")
     .exec()

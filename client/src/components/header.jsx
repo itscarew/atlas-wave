@@ -13,7 +13,7 @@ const Navbar = ({
     isAuthenticated,
   },
 }) => (
-  <nav className="flex justify-between items-center mx-8 ">
+  <nav className=" flex justify-between items-center mx-8 ">
     <div>
       <CustomLink
         to={isAuthenticated ? "/dashboard" : "/"}

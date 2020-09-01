@@ -21,10 +21,10 @@ const Dashboard = ({
   },
   articles: { articles, exploredArticles, loading },
 }) => {
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(5);
 
   const loadMore = () => {
-    setLimit(limit + 3);
+    setLimit(limit + 5);
   };
 
   useEffect(() => {

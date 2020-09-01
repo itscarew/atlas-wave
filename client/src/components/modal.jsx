@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
 
-const CustomModal = ({ children, onClick, isOpen, onRequestClose }) => {
+const CustomModal = ({ children, isOpen, onRequestClose }) => {
   const customStyles = {
     content: {
       top: "50%",

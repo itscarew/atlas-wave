@@ -19,8 +19,11 @@ const Likers = ({ noOfLikes, likes }) => {
         {noOfLikes} {noOfLikes > 1 ? "likes" : "like"}{" "}
       </P>
       <CustomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
-        <div className="flex flex-col justify-center m-8">
-          <H6 className="text-1xl font-semibold">Likes </H6>
+        <H6 className="px-8 font-semibold">Likes </H6>
+        <div
+          className="px-8 py-2"
+          style={{ height: "50vh", overflowY: "scroll" }}
+        >
           <div className="flex flex-col justify-center mt-4">
             {likes?.map((like) => (
               <div key={like._id} className="flex flex-col border-b py-2">
