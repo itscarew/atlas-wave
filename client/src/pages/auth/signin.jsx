@@ -41,7 +41,7 @@ const SigninPage = ({
   useEffect(() => {
     window.scrollTo(0, 0);
     if (isAuthenticated) {
-      history.push("/dashboard");
+      history.push("/home");
     }
     clearError();
   }, [isAuthenticated, clearError, history]);

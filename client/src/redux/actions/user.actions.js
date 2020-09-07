@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 import setAuthToken from "../../utils/setAuthToken";
 
 // Register User
@@ -8,6 +9,22 @@ export const registerUser = (newUser, history) => (dispatch) => {
     .post("/user/register", newUser)
     .then((res) => {
       history.push("/signin");
+      dispatch(setUserLoaded());
+      dispatch(clearError());
+    })
+    .catch((err) => {
+      dispatch(getError(err.response.data));
+      dispatch(setUserLoaded());
+    });
+};
+
+//Register Admin
+export const registerAdmin = (newUser, history) => (dispatch) => {
+  dispatch(setUserLoading());
+  axios
+    .post("/user/register", newUser)
+    .then((res) => {
+      history.push("/admindashboard");
       dispatch(setUserLoaded());
       dispatch(clearError());
     })
@@ -36,6 +53,35 @@ export const loginUser = (user) => (dispatch) => {
       dispatch(getCurrentUserProfile());
       dispatch(setUserLoaded());
       dispatch(clearError());
+    })
+    .catch((err) => {
+      dispatch(getError(err.response.data));
+      dispatch(setUserLoaded());
+    });
+};
+
+//login admin users only
+export const loginAdmin = (user, history) => (dispatch) => {
+  dispatch(setUserLoading());
+  axios
+    .post("/user/login", user)
+    .then((res) => {
+      const { token } = res.data;
+      const decoded = jwtDecode(token);
+
+      if (decoded?.role === "admin") {
+        localStorage.setItem("jwtToken", token);
+        setAuthToken(token);
+        history.push("/admindashboard");
+        dispatch(getCurrentUserProfile());
+        dispatch(clearError());
+        dispatch(setUserLoaded());
+      } else {
+        dispatch(
+          getError({ err: "You aren't an admin. Go to the sign up page " })
+        );
+        dispatch(setUserLoaded());
+      }
     })
     .catch((err) => {
       dispatch(getError(err.response.data));
@@ -88,7 +134,7 @@ export const editCurrentUserPassword = (userPassword) => (dispatch) => {
     });
 };
 
-// Remove User
+// Remove User (basic)
 export const deleteCurrentUser = () => (dispatch) => {
   axios
     .delete("/user/profile")
@@ -112,6 +158,42 @@ export const setOtherUser = (userId) => (dispatch) => {
         payload: res.data.data,
       });
       dispatch(setUserLoaded());
+      dispatch(clearError());
+    })
+    .catch((err) => {
+      dispatch(getError(err.response.data));
+      dispatch(setUserLoaded());
+    });
+};
+
+//set AllUsers
+export const setAllUsers = () => (dispatch) => {
+  dispatch(setUserLoading());
+  axios
+    .get(`/user`)
+    .then((res) => {
+      dispatch({
+        type: "SET_ALL_USERS",
+        payload: res.data.data,
+      });
+      dispatch(setUserLoaded());
+      dispatch(clearError());
+    })
+    .catch((err) => {
+      dispatch(getError(err.response.data));
+      dispatch(setUserLoaded());
+    });
+};
+
+//remove any user (admin-priviledge only)
+export const deleteAnyUser = (userId) => (dispatch) => {
+  axios
+    .delete(`/user/${userId}`)
+    .then(() => {
+      dispatch({
+        type: "DELETE_USERS",
+        payload: userId,
+      });
       dispatch(clearError());
     })
     .catch((err) => {

@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import PrivateRoute from "./private-route/private-route";
+import AdminPrivateRoute from "./private-route/admin-private-route";
 
 import store from "./store/store";
 
@@ -12,11 +13,15 @@ import IndexPage from "./pages";
 import SigninPage from "./pages/auth/signin";
 import SignupPage from "./pages/auth/signup";
 import ExplorePage from "./pages/explore";
-import DashboardPage from "./pages/dashboard";
+import DashboardPage from "./pages/home";
 import UserProfilePage from "./pages/user-profile";
 import OneArticlePage from "./pages/one-article";
 import EditUserPage from "./pages/edit-user";
 import CreateArticlePage from "./pages/article-form";
+
+import AdminLoginPage from "./pages/admin";
+import AdminDashBoardPage from "./pages/admin-dashboard";
+import AddAdminPage from "./pages/add-admin";
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -45,7 +50,15 @@ function App() {
         <Route exact path="/signup" component={SignupPage} />
         <Route exact path="/signin" component={SigninPage} />
         <Route exact path="/explore" component={ExplorePage} />
-        <PrivateRoute exact path="/dashboard" component={DashboardPage} />
+        <Route exact path="/admin" component={AdminLoginPage} />
+        <AdminPrivateRoute
+          exact
+          path="/admindashboard"
+          component={AdminDashBoardPage}
+        />
+        <AdminPrivateRoute exact path="/addadmin" component={AddAdminPage} />
+
+        <PrivateRoute exact path="/home" component={DashboardPage} />
         <PrivateRoute
           exact
           path="/articles/:articleId"
@@ -54,6 +67,7 @@ function App() {
         <PrivateRoute exact path="/user/:userId" component={UserProfilePage} />
         <PrivateRoute exact path="/create" component={CreateArticlePage} />
         <PrivateRoute exact path="/profile" component={EditUserPage} />
+
         <Route exact path="*" component={NotFoundPage} />
       </Switch>
     </BrowserRouter>

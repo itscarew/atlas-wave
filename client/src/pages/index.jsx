@@ -7,7 +7,7 @@ const IndexPage = ({ auth: { isAuthenticated }, history }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
     if (isAuthenticated) {
-      history.push("/dashboard");
+      history.push("/home");
     }
   }, [history, isAuthenticated]);
 

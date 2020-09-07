@@ -75,7 +75,7 @@ export const createArticle = (article, history) => (dispatch) => {
         type: "CREATE_ARTICLE",
         payload: article.data.data,
       });
-      history.push("/dashboard");
+      history.push("/home");
       dispatch(clearError());
       dispatch(articleLoaded());
     })

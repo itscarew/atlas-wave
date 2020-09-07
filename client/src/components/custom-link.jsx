@@ -5,7 +5,7 @@ const CustomLink = ({
   to,
   children,
   className,
-  activeclassname,
+  activeClassName,
   ...otherProps
 }) => {
   return (
@@ -13,7 +13,7 @@ const CustomLink = ({
       {...otherProps}
       to={to}
       className={className}
-      activeclassname={activeclassname}
+      activeClassName={activeClassName}
     >
       {children}
     </NavLink>

@@ -12,7 +12,7 @@ const NotFoundPage = () => {
         </H4>
         <CustomLink
           className="flex justify-center bg-teal-500 hover:bg-teal-600 text-white py-4 px-12 rounded my-4"
-          to="/dashboard"
+          to="/home"
         >
           Go Back
         </CustomLink>

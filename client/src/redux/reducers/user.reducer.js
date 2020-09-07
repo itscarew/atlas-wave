@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   otherUser: {},
   isAuthenticated: false,
   loading: false,
+  allUsers: [],
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -19,6 +20,16 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         otherUser: { ...action.payload },
+      };
+    case "SET_ALL_USERS":
+      return {
+        ...state,
+        allUsers: [...action.payload],
+      };
+    case "DELETE_USERS":
+      return {
+        ...state,
+        allUsers: state.allUsers.filter((user) => user._id !== action.payload),
       };
     case "USER_LOADING":
       return {

@@ -113,7 +113,7 @@ const EditProfile = ({
             </CustomClipLoader>
           </Button>
           <CustomLink
-            to="/dashboard"
+            to="/home"
             className="flex items-center justify-center w-1/2 border border-gray-600 text-gray-500 h-10 py-2 px-4 rounded m-4"
           >
             DISCARD
