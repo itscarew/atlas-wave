@@ -6,12 +6,12 @@ import FormLayout from "../../components/form";
 import InputLayout from "../../components/input";
 import ViewPassword from "../../components/view-password";
 import CustomClipLoader from "../../components/loader/cliploader";
-import ErrorMessage from "../../components/error-message";
+
 import CustomLink from "../../components/custom-link";
 import Button from "../../components/button";
 import { P } from "../../components/text/text";
 
-import { registerUser, clearError } from "../../redux/actions/user.actions";
+import { registerUser } from "../../redux/actions/user.actions";
 import { setViewPassword } from "../../redux/actions/viewPassword.actions";
 
 //react-icons
@@ -21,10 +21,9 @@ const SignupPage = ({
   history,
   registerUser,
   setViewPassword,
-  clearError,
+
   viewPassword: { status },
   auth: { loading, isAuthenticated },
-  error: { err },
 }) => {
   const initialState = { username: "", name: "", email: "", password: "" };
   const [user, setUser] = useState(initialState);
@@ -43,8 +42,8 @@ const SignupPage = ({
     if (isAuthenticated) {
       history.push("/home");
     }
-    clearError();
-  }, [clearError, history, isAuthenticated]);
+    //eslint-disable-next-line
+  }, [isAuthenticated]);
 
   const { username, name, email, password } = user;
   return (
@@ -126,8 +125,6 @@ const SignupPage = ({
             </Button>
           </div>
 
-          <ErrorMessage err={err} />
-
           <P className="mt-4 text-center">
             Already have an account ?
             <CustomLink className="text-teal-500" to="/signin">
@@ -143,12 +140,10 @@ const SignupPage = ({
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  error: state.error,
   viewPassword: state.viewPassword,
 });
 
 export default connect(mapStateToProps, {
   registerUser,
   setViewPassword,
-  clearError,
 })(SignupPage);

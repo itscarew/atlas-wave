@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 
 import Button from "../button";
@@ -7,20 +7,14 @@ import InputLayout from "../input";
 import { H8 } from "../text/text";
 import FormLayout from "../form";
 import ViewPasswordEye from "../view-password";
-import ErrorMessage from "../error-message";
 
-import {
-  editCurrentUserPassword,
-  clearError,
-} from "../../redux/actions/user.actions";
+import { editCurrentUserPassword } from "../../redux/actions/user.actions";
 import { setViewPassword } from "../../redux/actions/viewPassword.actions";
 
 const EditProfilePassword = ({
-  clearError,
   editCurrentUserPassword,
   setViewPassword,
   viewPassword: { status },
-  error: { err },
   auth: { loading },
 }) => {
   const [password, setPassword] = useState({ password: "" });
@@ -33,10 +27,6 @@ const EditProfilePassword = ({
     e.preventDefault();
     editCurrentUserPassword(password);
   };
-
-  useEffect(() => {
-    clearError();
-  }, [clearError]);
 
   return (
     <div className="w-full mx-auto mt-6">
@@ -57,7 +47,6 @@ const EditProfilePassword = ({
         <H8 className="mx-3 ">
           you are going to login again with this new password*
         </H8>
-        <ErrorMessage err={err} />
 
         <div className="flex items-center justify-between">
           <Button
@@ -77,12 +66,10 @@ const EditProfilePassword = ({
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  error: state.error,
   viewPassword: state.viewPassword,
 });
 
 export default connect(mapStateToProps, {
   editCurrentUserPassword,
   setViewPassword,
-  clearError,
 })(EditProfilePassword);

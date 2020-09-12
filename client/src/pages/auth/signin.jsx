@@ -10,21 +10,18 @@ import CustomClipLoader from "../../components/loader/cliploader";
 import { P } from "../../components/text/text";
 import CustomLink from "../../components/custom-link";
 
-import { loginUser, clearError } from "../../redux/actions/user.actions";
+import { loginUser } from "../../redux/actions/user.actions";
 import { setViewPassword } from "../../redux/actions/viewPassword.actions";
 
 //react-icons
 import { GrFormPreviousLink } from "react-icons/gr";
-import ErrorMessage from "../../components/error-message";
 
 const SigninPage = ({
   history,
   loginUser,
   setViewPassword,
-  clearError,
   viewPassword: { status },
   auth: { loading, isAuthenticated },
-  error: { err },
 }) => {
   const initialState = { email: "", password: "" };
   const [user, setUser] = useState(initialState);
@@ -43,8 +40,8 @@ const SigninPage = ({
     if (isAuthenticated) {
       history.push("/home");
     }
-    clearError();
-  }, [isAuthenticated, clearError, history]);
+    //eslint-disable-next-line
+  }, [isAuthenticated]);
 
   const { email, password } = user;
   return (
@@ -101,8 +98,6 @@ const SigninPage = ({
             </Button>
           </div>
 
-          <ErrorMessage err={err} />
-
           <P className="mt-4 text-center">
             Don't have an account?
             <CustomLink className="text-teal-500" to="/signup">
@@ -118,12 +113,10 @@ const SigninPage = ({
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  error: state.error,
   viewPassword: state.viewPassword,
 });
 
 export default connect(mapStateToProps, {
   loginUser,
   setViewPassword,
-  clearError,
 })(SigninPage);

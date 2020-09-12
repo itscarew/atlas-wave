@@ -6,7 +6,7 @@ import Button from "../button";
 import InputLayout from "../input";
 import CustomClipLoader from "../loader/cliploader";
 import CustomLink from "../custom-link";
-import ErrorMessage from "../error-message";
+
 import { P } from "../text/text";
 import { editCurrentUser } from "../../redux/actions/user.actions";
 import { logoutUser } from "../../redux/actions/user.actions";
@@ -20,7 +20,7 @@ const EditProfile = ({
     user: { username, name, email },
     loading,
   },
-  error: { err },
+
   history,
 }) => {
   const initialState = { username: "", name: "", email: "" };
@@ -28,6 +28,7 @@ const EditProfile = ({
 
   useEffect(() => {
     setUser({ ...user, username: username, name, email });
+    //eslint-disable-next-line
   }, []);
 
   const handleChange = (e) => {
@@ -119,8 +120,6 @@ const EditProfile = ({
             DISCARD
           </CustomLink>
         </div>
-
-        <ErrorMessage err={err} />
       </FormLayout>
     </div>
   );
@@ -128,7 +127,6 @@ const EditProfile = ({
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  error: state.error,
 });
 
 export default connect(mapStateToProps, { editCurrentUser, logoutUser })(

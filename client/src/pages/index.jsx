@@ -9,7 +9,8 @@ const IndexPage = ({ auth: { isAuthenticated }, history }) => {
     if (isAuthenticated) {
       history.push("/home");
     }
-  }, [history, isAuthenticated]);
+    //eslint-disable-next-line
+  }, [isAuthenticated]);
 
   return (
     <MainLayout index>

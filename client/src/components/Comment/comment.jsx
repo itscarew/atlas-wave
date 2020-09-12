@@ -30,6 +30,7 @@ const Comment = ({
 
   useEffect(() => {
     setArticleComment(articleId);
+    //eslint-disable-next-line
   }, []);
 
   return (
@@ -46,7 +47,6 @@ const Comment = ({
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  error: state.error,
   comments: state.comments,
 });
 

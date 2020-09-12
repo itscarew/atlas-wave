@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 
 import FormLayout from "../components/form";
@@ -6,22 +6,17 @@ import InputLayout from "../components/input";
 import ViewPassword from "../components/view-password";
 import Button from "../components/button";
 import CustomClipLoader from "../components/loader/cliploader";
-
-import { clearError } from "../redux/actions/user.actions";
 import { setViewPassword } from "../redux/actions/viewPassword.actions";
 
 //react-icons
 import { GrFormPreviousLink } from "react-icons/gr";
-import ErrorMessage from "../components/error-message";
 
 const Signin = ({
   history,
   loginAdmin,
   setViewPassword,
-  clearError,
   viewPassword: { status },
   auth: { loading },
-  error: { err },
 }) => {
   const initialState = { email: "", password: "" };
   const [user, setUser] = useState(initialState);
@@ -34,10 +29,6 @@ const Signin = ({
     loginAdmin(user, history);
     e.preventDefault();
   };
-
-  useEffect(() => {
-    clearError();
-  }, [clearError, history]);
 
   const { email, password } = user;
   return (
@@ -90,8 +81,6 @@ const Signin = ({
             <CustomClipLoader loading={loading}> Sign In</CustomClipLoader>
           </Button>
         </div>
-
-        <ErrorMessage err={err} />
       </FormLayout>
     </div>
   );
@@ -99,11 +88,9 @@ const Signin = ({
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  error: state.error,
   viewPassword: state.viewPassword,
 });
 
 export default connect(mapStateToProps, {
   setViewPassword,
-  clearError,
 })(Signin);

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { createArticle, clearError } from "../redux/actions/article.actions";
+import { createArticle } from "../redux/actions/article.actions";
 import FormLayout from "../components/form";
 import TextAreaLayout from "../components/textarea";
 import InputLayout from "../components/input";
 import { P } from "../components/text/text";
-import ErrorMessage from "../components/error-message";
+
 import Button from "../components/button";
 import CustomClipLoader from "../components/loader/cliploader";
 import MainLayout from "../layouts/main-layout";
@@ -16,10 +16,8 @@ import { IoIosCreate } from "react-icons/io";
 
 const CreateArticlePage = ({
   createArticle,
-  clearError,
   articles: { loading },
   history,
-  error: { err },
 }) => {
   const initialState = { title: "", content: "", articleImage: "" };
   const [article, setArticle] = useState(initialState);
@@ -33,8 +31,7 @@ const CreateArticlePage = ({
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    clearError();
-  }, [clearError]);
+  }, []);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -114,8 +111,6 @@ const CreateArticlePage = ({
               </CustomClipLoader>
             </Button>
           </div>
-
-          <ErrorMessage err={err} />
         </FormLayout>
       </div>
     </MainLayout>
@@ -123,10 +118,7 @@ const CreateArticlePage = ({
 };
 
 const mapStateToProps = (state) => ({
-  error: state.error,
   articles: state.articles,
 });
 
-export default connect(mapStateToProps, { createArticle, clearError })(
-  CreateArticlePage
-);
+export default connect(mapStateToProps, { createArticle })(CreateArticlePage);

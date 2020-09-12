@@ -11,14 +11,9 @@ export const setCurrentUserArticles = () => (dispatch) => {
         payload: articles.data.data,
       });
       dispatch(articleLoaded());
-      dispatch(clearError());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
-      dispatch(articleLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -32,14 +27,10 @@ export const setOneArticle = (articleId) => (dispatch) => {
         type: "SET_ONE_ARTICLE",
         payload: articles.data.data,
       });
-      dispatch(clearError());
       dispatch(articleLoaded());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -53,15 +44,10 @@ export const exploreArticles = () => (dispatch) => {
         type: "SET_EXPLORED_ARTICLES",
         payload: articles.data.data,
       });
-      dispatch(clearError());
       dispatch(articleLoaded());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
-      dispatch(articleLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -76,15 +62,10 @@ export const createArticle = (article, history) => (dispatch) => {
         payload: article.data.data,
       });
       history.push("/home");
-      dispatch(clearError());
       dispatch(articleLoaded());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
-      dispatch(articleLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -98,13 +79,9 @@ export const deleteArticle = (articleId) => (dispatch) => {
         payload: articleId,
       });
       dispatch(articleLoaded());
-      dispatch(clearError());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -118,14 +95,9 @@ export const setOtherUserArticles = (userId) => (dispatch) => {
         payload: res.data.data,
       });
       dispatch(articleLoaded());
-      dispatch(clearError());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
-      dispatch(articleLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -138,13 +110,9 @@ export const likeArticle = (articleId, userId) => (dispatch) => {
       dispatch(setOtherUserArticles(userId));
       dispatch(exploreArticles());
       dispatch(setOneArticle(articleId));
-      dispatch(clearError());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -157,13 +125,9 @@ export const unlikeArticle = (articleId, userId) => (dispatch) => {
       dispatch(setOtherUserArticles(userId));
       dispatch(exploreArticles());
       dispatch(setOneArticle(articleId));
-      dispatch(clearError());
     })
     .catch((err) => {
-      dispatch({
-        type: "GET_ERRORS",
-        payload: err.response.data,
-      });
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -186,4 +150,21 @@ export const clearError = () => {
   return {
     type: "CLEAR_ERRORS",
   };
+};
+
+//get Error
+export const getError = (error) => {
+  return {
+    type: "GET_ERRORS",
+    payload: error,
+  };
+};
+
+//alert Error
+export const alertError = (error) => (dispatch) => {
+  dispatch(getError(error));
+  dispatch(articleLoaded());
+  setTimeout(() => {
+    dispatch(clearError());
+  }, 5000);
 };

@@ -24,7 +24,8 @@ const OneArticlePage = ({
       history.push("/signin");
     }
     setOneArticle(articleId);
-  }, [setOneArticle, isAuthenticated, history]);
+    //eslint-disable-next-line
+  }, [isAuthenticated]);
 
   return (
     <MainLayout>

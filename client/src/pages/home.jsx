@@ -31,7 +31,8 @@ const Dashboard = ({
     window.scrollTo(0, 0);
     setCurrentUserArticles();
     exploreArticles();
-  }, [setCurrentUserArticles, exploreArticles]);
+    //eslint-disable-next-line
+  }, []);
 
   return (
     <MainLayout>

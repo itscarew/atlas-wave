@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 
 import FormLayout from "../components/form";
 import InputLayout from "../components/input";
 import ViewPassword from "../components/view-password";
 import CustomClipLoader from "../components/loader/cliploader";
-import ErrorMessage from "../components/error-message";
 
 import Button from "../components/button";
 import { P } from "../components/text/text";
 
-import { clearError } from "../redux/actions/user.actions";
 import { setViewPassword } from "../redux/actions/viewPassword.actions";
 
 //react-icons
@@ -20,10 +18,8 @@ const Signup = ({
   history,
   registerAdmin,
   setViewPassword,
-  clearError,
   viewPassword: { status },
   auth: { loading },
-  error: { err },
 }) => {
   const role = "admin";
   const initialState = {
@@ -41,13 +37,8 @@ const Signup = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(user);
     registerAdmin(user, history);
   };
-
-  useEffect(() => {
-    clearError();
-  }, [clearError, history]);
 
   const { username, name, email, password } = user;
   return (
@@ -123,8 +114,6 @@ const Signup = ({
             <CustomClipLoader loading={loading}> Create Admin</CustomClipLoader>
           </Button>
         </div>
-
-        <ErrorMessage err={err} />
       </FormLayout>{" "}
     </div>
   );
@@ -132,11 +121,9 @@ const Signup = ({
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  error: state.error,
   viewPassword: state.viewPassword,
 });
 
 export default connect(mapStateToProps, {
   setViewPassword,
-  clearError,
 })(Signup);

@@ -36,7 +36,8 @@ const UsersProfilePage = ({
     }
     setOtherUser(userId);
     setOtherUserArticles(userId);
-  }, [userId, setOtherUser, setOtherUserArticles]);
+    //eslint-disable-next-line
+  }, [isAuthenticated]);
 
   return (
     <MainLayout>

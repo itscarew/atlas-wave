@@ -10,11 +10,9 @@ export const registerUser = (newUser, history) => (dispatch) => {
     .then((res) => {
       history.push("/signin");
       dispatch(setUserLoaded());
-      dispatch(clearError());
     })
     .catch((err) => {
-      dispatch(getError(err.response.data));
-      dispatch(setUserLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -26,11 +24,9 @@ export const registerAdmin = (newUser, history) => (dispatch) => {
     .then((res) => {
       history.push("/admindashboard");
       dispatch(setUserLoaded());
-      dispatch(clearError());
     })
     .catch((err) => {
-      dispatch(getError(err.response.data));
-      dispatch(setUserLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -42,21 +38,15 @@ export const loginUser = (user) => (dispatch) => {
     .then((res) => {
       // Save to localStorage// Set token to localStorage
       const { token } = res.data;
-
       localStorage.setItem("jwtToken", token);
       // Set token to Auth header
       setAuthToken(token);
-      // // Decode token to get user data
-      // const decoded = jwt_decode(token);
-      // // Set current user
-      // dispatch(setCurrentUser(decoded));
+
       dispatch(getCurrentUserProfile());
       dispatch(setUserLoaded());
-      dispatch(clearError());
     })
     .catch((err) => {
-      dispatch(getError(err.response.data));
-      dispatch(setUserLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -78,14 +68,13 @@ export const loginAdmin = (user, history) => (dispatch) => {
         dispatch(setUserLoaded());
       } else {
         dispatch(
-          getError({ err: "You aren't an admin. Go to the sign up page " })
+          alertError({ err: "You aren't an admin. Go to the sign up page " })
         );
         dispatch(setUserLoaded());
       }
     })
     .catch((err) => {
-      dispatch(getError(err.response.data));
-      dispatch(setUserLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -97,8 +86,7 @@ export const getCurrentUserProfile = () => (dispatch) => {
       dispatch(setCurrentUser(res.data.data));
     })
     .catch((err) => {
-      dispatch(getError(err.response.data));
-      dispatch(setUserLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -108,13 +96,10 @@ export const editCurrentUser = (user) => (dispatch) => {
     .patch("/user/profile", user)
     .then((res) => {
       dispatch(getCurrentUserProfile());
-      dispatch(clearError());
+      dispatch(setUserLoaded());
     })
     .catch((err) => {
-      dispatch(getError(err.response.data));
-    })
-    .finally(() => {
-      dispatch(setUserLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -125,12 +110,10 @@ export const editCurrentUserPassword = (userPassword) => (dispatch) => {
     .then((res) => {
       dispatch(logoutUser());
       dispatch(clearError());
+      dispatch(setUserLoaded());
     })
     .catch((err) => {
-      dispatch(getError(err.response.data));
-    })
-    .finally(() => {
-      dispatch(setUserLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -143,7 +126,7 @@ export const deleteCurrentUser = () => (dispatch) => {
       dispatch(clearError());
     })
     .catch((err) => {
-      dispatch(getError(err.response.data));
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -158,11 +141,9 @@ export const setOtherUser = (userId) => (dispatch) => {
         payload: res.data.data,
       });
       dispatch(setUserLoaded());
-      dispatch(clearError());
     })
     .catch((err) => {
-      dispatch(getError(err.response.data));
-      dispatch(setUserLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -177,11 +158,9 @@ export const setAllUsers = () => (dispatch) => {
         payload: res.data.data,
       });
       dispatch(setUserLoaded());
-      dispatch(clearError());
     })
     .catch((err) => {
-      dispatch(getError(err.response.data));
-      dispatch(setUserLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -197,8 +176,7 @@ export const deleteAnyUser = (userId) => (dispatch) => {
       dispatch(clearError());
     })
     .catch((err) => {
-      dispatch(getError(err.response.data));
-      dispatch(setUserLoaded());
+      dispatch(alertError(err.response.data));
     });
 };
 
@@ -239,6 +217,15 @@ export const getError = (error) => {
   };
 };
 
+//alert Error
+export const alertError = (error) => (dispatch) => {
+  dispatch(getError(error));
+  dispatch(setUserLoaded());
+  setTimeout(() => {
+    dispatch(clearError());
+  }, 5000);
+};
+
 // Log user out
 export const logoutUser = () => (dispatch) => {
   // Remove token from local storage
@@ -247,5 +234,6 @@ export const logoutUser = () => (dispatch) => {
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
+  //dispatch clear error
   dispatch(clearError());
 };

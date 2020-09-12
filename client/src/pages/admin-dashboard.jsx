@@ -16,6 +16,7 @@ const AdminDashBoardPage = ({ auth: { allUsers }, setAllUsers }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
     setAllUsers();
+    //eslint-disable-next-line
   }, []);
 
   return (

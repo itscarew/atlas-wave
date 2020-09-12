@@ -28,6 +28,7 @@ const ExplorePage = ({
   useEffect(() => {
     window.scrollTo(0, 0);
     exploreArticles();
+    //eslint-disable-next-line
   }, []);
 
   return (

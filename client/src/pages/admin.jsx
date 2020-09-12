@@ -18,7 +18,8 @@ const AdminLoginPage = ({
     if (isAuthenticated && role === "admin") {
       history.push("/admindashboard");
     }
-  }, [isAuthenticated]);
+    //eslint-disable-next-line
+  }, []);
   return (
     <MainLayout>
       {" "}
@@ -29,7 +30,6 @@ const AdminLoginPage = ({
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  error: state.error,
   viewPassword: state.viewPassword,
 });
 
